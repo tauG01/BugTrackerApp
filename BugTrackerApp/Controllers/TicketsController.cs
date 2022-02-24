@@ -36,7 +36,6 @@ namespace BugTrackerApp.Controllers
         public async Task<IActionResult> Create()
         {
             var ticketDropDownsData = await _service.GetNewTicketDropdownsValues();
-
             ViewBag.Projects = new SelectList(ticketDropDownsData.Projects, "Id", "Name");
 
             return View();
@@ -47,10 +46,11 @@ namespace BugTrackerApp.Controllers
             if (!ModelState.IsValid)
             {
                 var ticketDropDownsData = await _service.GetNewTicketDropdownsValues();
-
                 ViewBag.Projects = new SelectList(ticketDropDownsData.Projects, "Id", "Name");
                 return View(Ticket);
             }
+            Ticket.Created = DateTime.Now;
+            Ticket.Modified = DateTime.Now;
             await _service.AddNewTicketAsync(Ticket);
             return RedirectToAction(nameof(Index));
         }
@@ -65,7 +65,7 @@ namespace BugTrackerApp.Controllers
                 Id = ticketDetails.Id,
                 Title = ticketDetails.Title,
                 Description = ticketDetails.Description,
-                Created = ticketDetails.Created,
+                //Created = ticketDetails.Created,
                 ProjectId = ticketDetails.ProjectId
             };
 
@@ -86,7 +86,26 @@ namespace BugTrackerApp.Controllers
                 ViewBag.Projects = new SelectList(ticketDropDownsData.Projects, "Id", "Name");
                 return View(Ticket);
             }
+            Ticket.Modified = DateTime.Now;
             await _service.UpdateTicketAsync(Ticket);
+            return RedirectToAction(nameof(Index));
+        }
+
+        //Get: Tickets/Delete/1
+        public async Task<IActionResult> Delete(int id)
+        {
+            var ticketDetails = await _service.GetByIdAsync(id);
+            if (ticketDetails == null) return View("NotFound");
+            return View(ticketDetails);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        public async Task<IActionResult> DeleteComfirmed(int id)
+        {
+            var ticketDetails = await _service.GetByIdAsync(id);
+            if (ticketDetails == null) return View("NotFound");
+
+            await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
     }

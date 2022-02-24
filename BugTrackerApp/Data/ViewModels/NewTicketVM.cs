@@ -15,10 +15,9 @@ namespace BugTrackerApp.Models
 
         [Required(ErrorMessage ="Title is required")]
         public string Title { get; set; }
-
-        [Required(ErrorMessage = "Description is required")]
         public string Description { get; set; }
         public DateTime Created { get; set; }
+        public DateTime Modified { get; set; }
         //public string Submitter { get; set; }
         //public string Assignee { get; set; }
         //public string Status { get; set; }
@@ -26,7 +25,7 @@ namespace BugTrackerApp.Models
 
         //relationships
         //project
-        [Display(Name = "Select a project")]
+        [Display(Name = "Select Project")]
         [Required(ErrorMessage = "Ticket project is required")]
         public int ProjectId { get; set; }
     }

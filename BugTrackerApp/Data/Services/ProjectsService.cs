@@ -24,5 +24,16 @@ namespace BugTrackerApp.Data.Services
                 .FirstOrDefaultAsync(n => n.Id == id);
             return projectDetails;
         }
+
+        //update project status with values from Project index view scripts
+        public async Task UpdateAsync(int projectId, int projectStatus)
+        {
+            var dbProject = await _context.Projects.FirstOrDefaultAsync(n => n.Id == projectId);
+            if (dbProject != null)
+            {
+                dbProject.ProjectStatus = (Enums.ProjectStatus)projectStatus;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

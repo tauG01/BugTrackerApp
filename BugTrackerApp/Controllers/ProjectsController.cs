@@ -51,11 +51,6 @@ namespace BugTrackerApp.Controllers
             return View(projectDetails);
         }
 
-
-
-
-
-
         //Get: Pojects/Edit/1
         public async Task<IActionResult> Edit(int id)
         {
@@ -76,12 +71,6 @@ namespace BugTrackerApp.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-
-
-
-
-
-
         //Get: Pojects/Delete/1
         public async Task<IActionResult> Delete(int id)
         {
@@ -97,6 +86,13 @@ namespace BugTrackerApp.Controllers
             if (projectDetails == null) return View("NotFound");
 
             await _service.DeleteAsync(id);
+            return RedirectToAction(nameof(Index));
+        }
+
+        //update project status with values from Project index view scripts
+        public async Task<IActionResult> UpdateStatus(int ProjectId, int ProjectStatus)
+        {
+            await _service.UpdateAsync(ProjectId, ProjectStatus);
             return RedirectToAction(nameof(Index));
         }
     }

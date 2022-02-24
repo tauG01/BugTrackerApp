@@ -12,13 +12,18 @@ namespace BugTrackerApp.Models
     {
         [Key]
         public int Id { get; set; }
+        [Display(Name ="Bug Title")]
         public string Title { get; set; }
         public string Description { get; set; }
+        //public DateTime Created { get { return DateTime.Now; } }
         public DateTime Created { get; set; }
-        //public string Submitter { get; set; }
+        public DateTime Modified { get; set; }
+        //[Display(Name = "Due Date")]
+        //public DateTime DueDate { get; set; }
+        //public string Reporter { get; set; }
         //public string Assignee { get; set; }
-        //public string Status { get; set; }
-        //public string Severity { get; set; }
+        //public string Status { get; set; } //Open | Closed
+        //public string Severity { get; set; } //High | Medium | Low
 
         //relationships
         //project

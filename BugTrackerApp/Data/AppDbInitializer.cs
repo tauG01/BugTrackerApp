@@ -66,35 +66,35 @@ namespace BugTrackerApp.Data
                         {
                             Title = "Ticket 1",
                             Description = "This is the description of the first Ticket",
-                            Created = DateTime.Now,
+                           // Created = DateTime.Now,
                             ProjectId = 1
                         },
                         new Ticket()
                         {
                             Title = "Ticket 2",
                             Description = "This is the description of the second Ticket",
-                            Created = DateTime.Now,
+                           // Created = DateTime.Now,
                             ProjectId = 2
                         },
                         new Ticket()
                         {
                             Title = "Ticket 3",
                             Description = "This is the description of the third Ticket",
-                            Created = DateTime.Now,
+                          //  Created = DateTime.Now,
                             ProjectId = 3
                         },
                         new Ticket()
                         {
                             Title = "Ticket 4",
                             Description = "This is the description of the fourth Ticket",
-                            Created = DateTime.Now,
+                          //  Created = DateTime.Now,
                             ProjectId = 4
                         },
                         new Ticket()
                         {
                             Title = "Ticket 6",
                             Description = "This is the description of the fifth Ticket",
-                            Created = DateTime.Now,
+                          //  Created = DateTime.Now,
                             ProjectId = 5
                         },
                     });

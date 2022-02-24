@@ -31,6 +31,7 @@ namespace BugTrackerApp.Migrations
                     Title = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Created = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Modified = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ProjectId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BugTrackerApp.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20220208234817_Initial")]
+    [Migration("20220210091708_Initial")]
     partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -57,6 +57,9 @@ namespace BugTrackerApp.Migrations
 
                     b.Property<string>("Description")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("Modified")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ProjectId")
                         .HasColumnType("int");

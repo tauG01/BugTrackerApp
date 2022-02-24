@@ -25,6 +25,7 @@ namespace BugTrackerApp.Data.Services
                 Title = data.Title,
                 Description = data.Description,
                 Created = data.Created,
+                Modified = data.Modified,
                 ProjectId = data.ProjectId
             };
             await _context.Tickets.AddAsync(newTicket);
@@ -55,7 +56,7 @@ namespace BugTrackerApp.Data.Services
             {
                 dbTicket.Title = data.Title;
                 dbTicket.Description = data.Description;
-                dbTicket.Created = data.Created;
+                dbTicket.Modified = data.Modified;
                 dbTicket.ProjectId = data.ProjectId;
                 await _context.SaveChangesAsync();
             }

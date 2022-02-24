@@ -1,4 +1,5 @@
 ﻿using BugTrackerApp.Data.Base;
+using BugTrackerApp.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -12,6 +13,7 @@ namespace BugTrackerApp.Models
         [Key]
         public int Id { get; set; }
 
+        [Display(Name = "Project Name")]
         [Required(ErrorMessage = "Name is required")]
         public string Name { get; set; }
 
@@ -20,7 +22,14 @@ namespace BugTrackerApp.Models
 
         [Required(ErrorMessage = "Owner is required")]
         public string Owner { get; set; }
-        
+
+        [Display(Name = "Status")]
+        public ProjectStatus  ProjectStatus { get; set; }
+        //[Display(Name = "Start Date")]
+        // public string StartDate { get; set; }
+        //[Display(Name = "End Date")]
+        // public string EndDate { get; set; }
+
         //relationships
         public List<Ticket> Tickets { get; set; }
     }

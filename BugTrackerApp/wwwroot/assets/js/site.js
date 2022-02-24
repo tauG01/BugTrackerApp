@@ -6,6 +6,9 @@ $(document).ready(function () {
     $('#userTable').DataTable({
         "scrollY": "450px",
         "scrollCollapse": true,
-        "paging": true
+        "paging": true,
+        "pageLength": 5,
+        "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
     });
 });
+
