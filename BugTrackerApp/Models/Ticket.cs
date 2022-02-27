@@ -1,4 +1,5 @@
 ﻿using BugTrackerApp.Data.Base;
+using BugTrackerApp.Data.Enums;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -18,12 +19,13 @@ namespace BugTrackerApp.Models
         //public DateTime Created { get { return DateTime.Now; } }
         public DateTime Created { get; set; }
         public DateTime Modified { get; set; }
-        //[Display(Name = "Due Date")]
-        //public DateTime DueDate { get; set; }
-        //public string Reporter { get; set; }
-        //public string Assignee { get; set; }
-        //public string Status { get; set; } //Open | Closed
-        //public string Severity { get; set; } //High | Medium | Low
+        [Display(Name = "Due Date")]
+        public DateTime DueDate { get; set; }
+        public string Reporter { get; set; }
+        public string Assignee { get; set; }
+        [Display(Name = "Assign Status")]
+        public TicketStatus TicketStatus { get; set; } //Open | Closed
+        public string Severity { get; set; } //High | Medium | Low
 
         //relationships
         //project

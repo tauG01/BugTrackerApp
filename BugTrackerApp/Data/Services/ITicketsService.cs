@@ -14,5 +14,8 @@ namespace BugTrackerApp.Data.Services
         Task<NewTicketDropdownsVM> GetNewTicketDropdownsValues();
         Task AddNewTicketAsync(NewTicketVM data);
         Task UpdateTicketAsync(NewTicketVM data);
+
+        //update ticket status with values from Ticket index view scripts
+        Task UpdateAsync(int ticketId, int ticketStatus);
     }
 }

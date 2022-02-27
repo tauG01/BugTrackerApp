@@ -1,5 +1,7 @@
-﻿using BugTrackerApp.Models;
+﻿using BugTrackerApp.Data.Static;
+using BugTrackerApp.Models;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -102,6 +104,95 @@ namespace BugTrackerApp.Data
                 }
             }
 
+        }
+
+        public static async Task SeedUsersAndRolesAsync(IApplicationBuilder applicationBuilder)
+        {
+            using (var serviceScope = applicationBuilder.ApplicationServices.CreateScope())
+            {
+
+                //Roles
+                var roleManager = serviceScope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+
+                if (!await roleManager.RoleExistsAsync(UserRoles.Admin))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Admin));
+                if (!await roleManager.RoleExistsAsync(UserRoles.ProjectManager))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.ProjectManager));
+                if (!await roleManager.RoleExistsAsync(UserRoles.Programmer))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.Programmer));
+                if (!await roleManager.RoleExistsAsync(UserRoles.User))
+                    await roleManager.CreateAsync(new IdentityRole(UserRoles.User));
+
+                //Users
+                var userManager = serviceScope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                string adminUserEmail = "admin@bugtracker.com";
+
+                var adminUser = await userManager.FindByEmailAsync(adminUserEmail);
+                if (adminUser == null)
+                {
+                    var newAdminUser = new ApplicationUser()
+                    {
+                        FirstName = "Admin",
+                        LastName = "User",
+                        UserName = "admin-user",
+                        Email = adminUserEmail,
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(newAdminUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAdminUser, UserRoles.Admin);
+                }
+
+                string projectManagerUserEmail = "pmanager@bugtracker.com";
+
+                var projectManagerUser = await userManager.FindByEmailAsync(projectManagerUserEmail);
+                if (projectManagerUser == null)
+                {
+                    var newProjectManagerUser = new ApplicationUser()
+                    {
+                        FirstName = "ProjectManager",
+                        LastName = "User",
+                        UserName = "pmanager-user",
+                        Email = projectManagerUserEmail,
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(newProjectManagerUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newProjectManagerUser, UserRoles.ProjectManager);
+                }
+
+                string programmerUserEmail = "programmer@bugtracker.com";
+
+                var programmerUser = await userManager.FindByEmailAsync(programmerUserEmail);
+                if (programmerUser == null)
+                {
+                    var newProgrammerUser = new ApplicationUser()
+                    {
+                        FirstName = "Programmer",
+                        LastName = "User",
+                        UserName = "programmer-user",
+                        Email = programmerUserEmail,
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(newProgrammerUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newProgrammerUser, UserRoles.Programmer);
+                }
+
+                string appUserEmail = "user@bugtracker.com";
+
+                var appUser = await userManager.FindByEmailAsync(appUserEmail);
+                if (appUser == null)
+                {
+                    var newAppUser = new ApplicationUser()
+                    {
+                        FirstName = "Application",
+                        LastName = "User",
+                        UserName = "app-user",
+                        Email = appUserEmail,
+                        EmailConfirmed = true
+                    };
+                    await userManager.CreateAsync(newAppUser, "Coding@1234?");
+                    await userManager.AddToRoleAsync(newAppUser, UserRoles.User);
+                }
+            }
         }
     }
 }

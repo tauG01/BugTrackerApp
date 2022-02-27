@@ -8,53 +8,94 @@
 
         <h3 class="card-title text-primary">Projects</h3>
 
-        <p class="card-description">
-            <a asp-action="Create">Add New Project</a>
-        </p>
+        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+        {
+            <p class="card-description">
+                <a asp-action="Create">Add New Project</a>
+            </p>
+        }
 
         <table class="table" id="userTable">
             <thead>
                 <tr class="text-left">
                     <th>@Html.DisplayNameFor(model => model.Name)</th>
                     <th>@Html.DisplayNameFor(model => model.Owner)</th>
-                    <th>@Html.DisplayNameFor(model => model.ProjectStatus)</th>
+                    <th>Status</th>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
+                        <th>@Html.DisplayNameFor(model => model.ProjectStatus)</th>
+                    }
                     <th> Bugs </th>
 
-                    <th>Actions</th>
+                    <th> Details </th>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
+                        <th>Actions</th>
+                    }
 
                 </tr>
             </thead>
             <tbody>
                 @foreach (var item in Model)
                 {
-                <tr>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Owner)
-                    </td>
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Owner)
+                        </td>
 
-                    <td class="align-middle">
-                        <form method="post" asp-action="UpdateStatus">
-                            <input type="hidden" name="ProjectId" value="@item.Id" />
-                            <select class="StatusSelect" asp-for="@item.ProjectStatus)"
-                                    asp-items="Html.GetEnumSelectList(typeof(BugTrackerApp.Data.Enums.ProjectStatus))"
-                                    name="ProjectStatus">
-                            </select>
-                        </form>
-                    </td>
+                        <td class="align-middle">
+                            @if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.New)
+                            {
+                                <label class="badge badge-danger">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                            }
+                            else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.Active)
+                            {
+                                <label class="badge badge-info">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                            }
+                            else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.InProgress)
+                            {
+                                <label class="badge badge-warning">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                            }
+                            else
+                            {
+                                <label class="badge badge-success">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                            }
+                        </td>
 
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Tickets.Count)
-                    </td>
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                        {
+                            <td class="align-middle">
+                                <form method="post" asp-action="UpdateStatus">
+                                    <input type="hidden" name="ProjectId" value="@item.Id" />
+                                    <select class="StatusSelect" asp-for="@item.ProjectStatus)"
+                                            asp-items="Html.GetEnumSelectList(typeof(BugTrackerApp.Data.Enums.ProjectStatus))"
+                                            name="ProjectStatus">
+                                    </select>
+                                </form>
+                            </td>
+                        }
 
-                    <td class="align-middle">
-                        <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"> Edit </a> |
-                        <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"> Details </a> |
-                        <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
-                    </td>
-                </tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Tickets.Count)
+                        </td>
+
+                        <td class="align-middle">
+                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                        </td>
+
+                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                        {
+                            <td class="align-middle">
+                                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"> Edit </a> |
+                                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
+                            </td>
+                        }
+                    </tr>
                 }
             </tbody>
         </table>
@@ -62,11 +103,11 @@
 </div>
 
 @section scripts{
-<script>
-    $(function () {
-        $(".StatusSelect").change(function () {
-            $(this).closest('form').submit();
+    <script>
+        $(function () {
+            $(".StatusSelect").change(function () {
+                $(this).closest('form').submit();
+            })
         })
-    })
-</script>
- }
+    </script>
+}

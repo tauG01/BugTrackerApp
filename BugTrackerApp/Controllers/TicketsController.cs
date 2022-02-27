@@ -108,5 +108,12 @@ namespace BugTrackerApp.Controllers
             await _service.DeleteAsync(id);
             return RedirectToAction(nameof(Index));
         }
+
+        //update ticket status with values from Ticket index view scripts
+        public async Task<IActionResult> UpdateStatus(int TicketId, int TicketStatus)
+        {
+            await _service.UpdateAsync(TicketId, TicketStatus);
+            return RedirectToAction(nameof(Index));
+        }
     }
 }

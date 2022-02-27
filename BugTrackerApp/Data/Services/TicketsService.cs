@@ -62,5 +62,15 @@ namespace BugTrackerApp.Data.Services
             }
 
         }
+        //update ticket status with values from Ticket index view scripts
+        public async Task UpdateAsync(int ticketId, int ticketStatus)
+        {
+            var dbTicket = await _context.Tickets.FirstOrDefaultAsync(n => n.Id == ticketId);
+            if (dbTicket != null)
+            {
+                dbTicket.TicketStatus = (Enums.TicketStatus)ticketStatus;
+                await _context.SaveChangesAsync();
+            }
+        }
     }
 }

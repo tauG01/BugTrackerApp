@@ -23,7 +23,7 @@ namespace BugTrackerApp.Models
         [Required(ErrorMessage = "Owner is required")]
         public string Owner { get; set; }
 
-        [Display(Name = "Status")]
+        [Display(Name = "Assign Status")]
         public ProjectStatus  ProjectStatus { get; set; }
         //[Display(Name = "Start Date")]
         // public string StartDate { get; set; }

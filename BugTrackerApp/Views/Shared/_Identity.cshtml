@@ -1,0 +1,38 @@
+﻿@*profile section*@
+
+@inject UserManager<ApplicationUser> UserManager;
+@if (!User.Identity.IsAuthenticated)
+{
+    <li class="nav-item dropdown ">
+        <a class="btn btn-primary" asp-controller="Account" asp-action="Login">
+            Sign in
+        </a>
+    </li>
+    <li class="nav-item dropdown ">
+        <a class="btn btn-primary" asp-controller="Account" asp-action="Register">
+            Sign up
+        </a>
+    </li>
+}
+else
+{
+    <li class="nav-item nav-profile dropdown">
+        <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown" id="profileDropdown">
+            <i class="mdi mdi-account-circle mx-0" style="font-size: 2.5em;"></i>
+        </a>
+        <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="profileDropdown">
+            <a class="dropdown-item" href="#" title="Manage">
+                Signed in as @UserManager.GetUserName(User)
+            </a>
+            <a class="dropdown-item" href="#" title="Manage">
+                User profile
+            </a>
+            <div class="dropdown-item">
+                <form class="form-inline" asp-controller="Account" asp-action="Logout">
+                    <button type="submit" class="nav-link btn btn-link">Sign Out</button>
+                </form>
+            </div>
+        </div>
+    </li>
+}
+
