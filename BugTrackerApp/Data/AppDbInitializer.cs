@@ -59,7 +59,7 @@ namespace BugTrackerApp.Data
                     context.SaveChanges();
                 }
 
-                //Cinema
+                //Tickets
                 if (!context.Tickets.Any())
                 {
                     context.Tickets.AddRange(new List<Ticket>()

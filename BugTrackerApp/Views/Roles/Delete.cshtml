@@ -1,0 +1,31 @@
+﻿@model IdentityRole
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-12">
+            <div class="row g-0">
+                <div class="col-md-12">
+                    <div class="card-header bg-primary">
+                        <p class="card-text">
+                            <h5 class="card-title text-white">
+                                Delete @Model.Name
+                            </h5>
+                        </p>
+                    </div>
+                </div>
+               
+            </div>
+        </div>
+        <div class="row form-group">
+            <form asp-action="Delete">
+                <input type="hidden" asp-for="Id" />
+                <input type="submit" value="Comfirm" class="btn btn-danger" />
+            </form>
+            <a class="btn btn-success" asp-action="Index" asp-route-id="@Model.Id"> Back to list </a>
+        </div>
+    </div>
+</div>

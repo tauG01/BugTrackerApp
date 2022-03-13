@@ -24,12 +24,12 @@ namespace BugTrackerApp.Controllers
             _context = context;
         }
 
-        //List all users
-        public async Task<IActionResult> Index()
-        {
-            var users = await _context.Users.ToListAsync();
-            return View(users);
-        }
+        ////List all users
+        //public async Task<IActionResult> Index()
+        //{
+        //   var users = await _context.Users.ToListAsync();
+        //   return View(users);
+        //}
 
         //logging in user
         public IActionResult Login() => View(new LoginVM());

@@ -4,6 +4,9 @@
 
 $(document).ready(function () {
     $('#userTable').DataTable({
+        "fnDrawCallback": function (oSettings) {
+            
+        },
         "scrollY": "450px",
         "scrollCollapse": true,
         "paging": true,
@@ -12,3 +15,10 @@ $(document).ready(function () {
     });
 });
 
+//$(document).ready(function () {
+//    $('#example').dataTable({
+//        "fnDrawCallback": function (oSettings) {
+//            alert('DataTables has redrawn the table');
+//        }
+//    });
+//});

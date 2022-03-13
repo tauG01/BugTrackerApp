@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="~/assets/vendors/feather/feather.css">
     <link rel="stylesheet" href="~/assets/vendors/feather-icons-web/feather.css">
     <link rel="stylesheet" href="~/assets/vendors/ti-icons/css/themify-icons.css">
-    <link rel="stylesheet" href="../../assets/vendors/mdi/css/materialdesignicons.min.css">
+    <link rel="stylesheet" href="~/assets/vendors/mdi/css/materialdesignicons.min.css">
     <link rel="stylesheet" href="~/assets/vendors/css/vendor.bundle.base.css">
     <!-- endinject -->
     <!-- Plugin css for this page -->
@@ -87,13 +87,13 @@
                     @if (User.Identity.IsAuthenticated && User.IsInRole("Admin"))
                     {
                         <li class="nav-item">
-                            <a class="nav-link" asp-controller="Account" asp-action="Index">
+                            <a class="nav-link" asp-controller="Users" asp-action="Index">
                                 <i class="icon-users menu-icon"></i>
                                 <span class="menu-title">Manage Users</span>
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">
+                            <a class="nav-link" asp-controller="Roles" asp-action="Index">
                                 <i class="icon-monitor menu-icon"></i>
                                 <span class="menu-title">Manage Roles</span>
                             </a>
