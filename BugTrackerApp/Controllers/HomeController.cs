@@ -1,5 +1,7 @@
-﻿using BugTrackerApp.Models;
+﻿using BugTrackerApp.Data.Services;
+using BugTrackerApp.Models;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System;
@@ -14,15 +16,20 @@ namespace BugTrackerApp.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IProjectsService _service;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IProjectsService service, UserManager<ApplicationUser> userManager)
         {
             _logger = logger;
+            _service = service;
+            _userManager = userManager;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var data = await _service.GetAllAsync(n => n.Tickets);
+            return View(data);
         }
 
         public IActionResult Privacy()

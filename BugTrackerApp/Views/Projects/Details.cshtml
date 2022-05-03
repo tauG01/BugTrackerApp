@@ -12,7 +12,7 @@
                     <div class="card-header bg-primary">
                         <p class="card-text">
                             <h5 class="card-title text-white">
-                                @Model.Name
+                                Project Information
                             </h5>
                         </p>
                     </div>
@@ -20,27 +20,32 @@
                 <div class="col-md-12">
                     <div class="card-body">
                         <p class="card-text">
+                            <b>Name: </b> @Model.Name
+                        </p>
+                        <p class="card-text">
                             <b>Owner: </b> @Model.Owner
                         </p>
-                        <p class="card-text">@Model.Description</p>
                         <p class="card-text">
-                            <b>Reports: </b> @Model.Tickets.Count
+                            <b>Description: </b> @Model.Description
+                        </p>
+                        <p class="card-text">
+                            <b>Bugs: </b> @Model.Tickets.Count
                         </p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="form-group">
-            <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"> Edit </a>
-            <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id"> Delete </a>
-            <a class="btn btn-success" asp-action="Index" asp-route-id="@Model.Id"> Back to list </a>
-        </div>
+        @*<div class="form-group">
+                <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model.Id"> Edit </a>
+                <a class="btn btn-danger" asp-action="Delete" asp-route-id="@Model.Id"> Delete </a>
+                <a class="btn btn-outline-secondary" asp-action="Index" asp-route-id="@Model.Id"> Back to list </a>
+            </div>*@
     </div>
 
     @*Tickets for this project*@
     <div class="col-md-8">
 
-        <h3 class="card-title text-primary">Reports for @Model.Name</h3>
+        <h3 class="card-title text-primary">Bugs for this project (@Model.Name)</h3>
 
         <table class="table" id="userTable">
             <thead>
@@ -68,13 +73,50 @@
                         </td>
 
                         @*<td class="align-middle">
-                            <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i>Edit </a> |
-                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i>Details </a> |
-                            <a class="btn btn-danger text-white" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete </a>
-                        </td>*@
+                                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"><i class="bi bi-pencil-square"></i>Edit </a> |
+                                <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"><i class="bi bi-eye"></i>Details </a> |
+                                <a class="btn btn-danger text-white" asp-action="Delete" asp-route-id="@item.Id"><i class="bi bi-trash"></i>Delete </a>
+                            </td>*@
                     </tr>
                 }
             </tbody>
         </table>
     </div>
+
+    @*Users for this project*@
+<div class="col-md-8">
+
+    <h3 class="card-title text-primary">Project Users</h3>
+
+    <p class="card-description">
+        <a asp-action="AddProjectUsers" asp-route-id="@Model.Id">Add User</a>
+    </p>
+
+    <table class="table" id="userTable">
+        <thead>
+            <tr class="text-left">
+                <th>Name</th>
+                <th>Email</th>
+                <th>Role</th>
+
+                @*<th>Actions</th>*@
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.ApplicationUsers)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.UserName)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Email)
+                    </td>
+                    
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 </div>

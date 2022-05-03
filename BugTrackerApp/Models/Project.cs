@@ -32,6 +32,7 @@ namespace BugTrackerApp.Models
 
         //relationships
         public List<Ticket> Tickets { get; set; }
+        public List<ApplicationUser> ApplicationUsers { get; set; }
     }
 }
 

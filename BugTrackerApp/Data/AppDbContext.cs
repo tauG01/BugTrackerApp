@@ -22,10 +22,18 @@ namespace BugTrackerApp.Data
                 .WithMany(p => p.Tickets)
                 .HasForeignKey(t => t.ProjectId);
 
+            //modelBuilder.Entity<Project>()
+            //    .HasMany<ApplicationUser>(c => c.ApplicationUsers)
+            //    .WithMany(i => i.Projects)
+            //    .Map(t => t.MapLeftKey("ProjectID")
+            //    .MapRightKey("Id")
+            //    .ToTable("Projects"));
+
             base.OnModelCreating(modelBuilder);
         }
 
         public DbSet<Project> Projects { get; set; }
         public DbSet<Ticket> Tickets { get; set; }
+        public DbSet<ApplicationUser> ApplicationUsers { get; set; }
     }
 }

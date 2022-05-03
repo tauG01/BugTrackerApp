@@ -21,6 +21,7 @@ namespace BugTrackerApp.Data.Services
             var projectDetails = await _context.Projects
                 .Where(proj => proj.Id == id)
                 .Include(proj => proj.Tickets)
+                .Include(proj => proj.ApplicationUsers)
                 .FirstOrDefaultAsync(n => n.Id == id);
             return projectDetails;
         }

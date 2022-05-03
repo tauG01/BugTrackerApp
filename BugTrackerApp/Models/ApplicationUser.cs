@@ -14,5 +14,8 @@ namespace BugTrackerApp.Models
 
         [Display(Name ="Last name")]
         public string LastName { get; set; }
+
+        //relationships
+        public List<Project> Projects { get; set; }
     }
 }

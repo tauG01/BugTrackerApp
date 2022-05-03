@@ -1,0 +1,66 @@
+﻿@model List<BugTrackerApp.Data.ViewModels.ProjectUsersVM>
+@{
+    ViewData["Title"] = "Manage";
+}
+
+<form method="post" >
+    <div class="card">
+        <div class="col-md-12">
+
+            <h3 class="card-title text-primary">Add User</h3>
+
+            <p class="card-description">
+                Add User to Project (@ViewBag.Name)
+            </p>
+
+            <table class="table" id="userTable">
+                <thead>
+                    <tr class="text-left">
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Role</th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (int i = 0; i < Model.Count; i++)
+                    {
+                        <tr>
+                            <td class="align-middle">
+                                <div class="form-check m-1">
+                                    <input type="hidden" asp-for="@Model[i].UserId" />
+                                    <input type="hidden" asp-for="@Model[i].UserName" />
+                                    <input asp-for="@Model[i].Selected" class="form-check-input" />
+                                </div>
+
+                                <div>
+                                    <label class="form-check-label" asp-for="@Model[i].Selected">
+                                        <i class="mdi mdi-account-circle mx-2" style="font-size: 2.0em;" ></i>
+                                        @Model[i].UserName
+                                    </label>
+                                </div>
+                            </td>
+
+                            <td class="align-middle">
+                                <label class="form-check-label" asp-for="@Model[i].Selected">
+                                    @Model[i].Email
+                                </label>
+                            </td>
+                            <td class="align-middle">
+                                <label class="form-check-label" asp-for="@Model[i].Selected">
+                                    @Html.DisplayFor(modelItem => Model[i].Role)
+                                </label>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="card-footer">
+        <input type="submit" value="Update" class="btn btn-primary" style="width:auto" />
+        <a asp-action="Index" asp-route-id="@ViewBag.userId" class="btn btn-outline-secondary" style="width:auto">Cancel</a>
+    </div>
+</form>
+
