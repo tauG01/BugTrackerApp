@@ -43,6 +43,8 @@ namespace BugTrackerApp.Controllers
             else
             {
                 await _service.AddAsync(project);
+                //notification
+                TempData["success"] = "Project created successfully";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -72,6 +74,8 @@ namespace BugTrackerApp.Controllers
             }
 
             await _service.UpdateAsync(id, project);
+            //notification
+            TempData["success"] = "Project updated successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -90,6 +94,8 @@ namespace BugTrackerApp.Controllers
             if (projectDetails == null) return View("NotFound");
 
             await _service.DeleteAsync(id);
+            //notification
+            TempData["success"] = "Project deleted successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -97,6 +103,8 @@ namespace BugTrackerApp.Controllers
         public async Task<IActionResult> UpdateStatus(int ProjectId, int ProjectStatus)
         {
             await _service.UpdateAsync(ProjectId, ProjectStatus);
+            //notification
+            TempData["success"] = "Project status updated successfully";
             return RedirectToAction(nameof(Index));
         }
 

@@ -51,6 +51,7 @@ namespace BugTrackerApp.Controllers
                         return RedirectToAction("Index", "Home");
                     }
                 }
+                //notification
                 TempData["Error"] = "Incorrect username or password.";
                 return View(loginVM);
             }

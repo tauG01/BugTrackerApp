@@ -38,6 +38,8 @@ namespace BugTrackerApp.Controllers
             if (Name != null)
             {
                 await _roleManager.CreateAsync(new IdentityRole(Name.Trim()));
+                //notification
+                TempData["success"] = "Role created successfully";
             }
             return RedirectToAction(nameof(Index));
         }
@@ -56,6 +58,8 @@ namespace BugTrackerApp.Controllers
             if (roleName != null)
             {
                await _roleManager.UpdateAsync(roleName);
+                //notification
+                TempData["success"] = "Role updated successfully";
             }
             
             return RedirectToAction(nameof(Index));
@@ -76,6 +80,8 @@ namespace BugTrackerApp.Controllers
             if (role == null) return View("NotFound");
           
             await _roleManager.DeleteAsync(role);
+            //notification
+            TempData["success"] = "Role deleted successfully";
             return RedirectToAction(nameof(Index));
         }
     }

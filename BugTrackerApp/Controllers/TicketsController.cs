@@ -52,6 +52,8 @@ namespace BugTrackerApp.Controllers
             Ticket.Created = DateTime.Now;
             Ticket.Modified = DateTime.Now;
             await _service.AddNewTicketAsync(Ticket);
+            //notification
+            TempData["success"] = "Bug created successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -88,6 +90,8 @@ namespace BugTrackerApp.Controllers
             }
             Ticket.Modified = DateTime.Now;
             await _service.UpdateTicketAsync(Ticket);
+            //notification
+            TempData["success"] = "Bug updated successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -106,6 +110,8 @@ namespace BugTrackerApp.Controllers
             if (ticketDetails == null) return View("NotFound");
 
             await _service.DeleteAsync(id);
+            //notification
+            TempData["success"] = "Bug deleted successfully";
             return RedirectToAction(nameof(Index));
         }
 
@@ -113,6 +119,8 @@ namespace BugTrackerApp.Controllers
         public async Task<IActionResult> UpdateStatus(int TicketId, int TicketStatus)
         {
             await _service.UpdateAsync(TicketId, TicketStatus);
+            //notification
+            TempData["success"] = "Bug status updated successfully";
             return RedirectToAction(nameof(Index));
         }
     }
