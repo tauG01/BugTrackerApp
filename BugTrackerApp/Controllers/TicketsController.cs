@@ -47,14 +47,16 @@ namespace BugTrackerApp.Controllers
             {
                 var ticketDropDownsData = await _service.GetNewTicketDropdownsValues();
                 ViewBag.Projects = new SelectList(ticketDropDownsData.Projects, "Id", "Name");
-                return View(Ticket);
+                //return View(Ticket);
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", Ticket) });
             }
             Ticket.Created = DateTime.Now;
             Ticket.Modified = DateTime.Now;
             await _service.AddNewTicketAsync(Ticket);
             //notification
             TempData["success"] = "Bug created successfully";
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
         }
 
         //Get: Events/Edit/1
@@ -86,13 +88,15 @@ namespace BugTrackerApp.Controllers
                 var ticketDropDownsData = await _service.GetNewTicketDropdownsValues();
 
                 ViewBag.Projects = new SelectList(ticketDropDownsData.Projects, "Id", "Name");
-                return View(Ticket);
+                //return View(Ticket);
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Edit", Ticket) });
             }
             Ticket.Modified = DateTime.Now;
             await _service.UpdateTicketAsync(Ticket);
             //notification
             TempData["success"] = "Bug updated successfully";
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
         }
 
         //Get: Tickets/Delete/1
@@ -112,7 +116,8 @@ namespace BugTrackerApp.Controllers
             await _service.DeleteAsync(id);
             //notification
             TempData["success"] = "Bug deleted successfully";
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
         }
 
         //update ticket status with values from Ticket index view scripts

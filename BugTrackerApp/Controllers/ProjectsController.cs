@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using static BugTrackerApp.Helper;
 
 namespace BugTrackerApp.Controllers
 {
@@ -27,6 +28,7 @@ namespace BugTrackerApp.Controllers
             return View(data);
         }
 
+        [NoDirectAccess] //Preventing direct access from URL, Logic implemented in Helper class
         //Get: Pojects/Create
         public IActionResult Create()
         {
@@ -38,7 +40,8 @@ namespace BugTrackerApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(project);
+               // return View(project);
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", project) });
             }
             else
             {
@@ -46,7 +49,9 @@ namespace BugTrackerApp.Controllers
                 //notification
                 TempData["success"] = "Project created successfully";
             }
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
+
         }
 
         //GET: Projects/Details/1
@@ -70,13 +75,15 @@ namespace BugTrackerApp.Controllers
         {
             if (!ModelState.IsValid)
             {
-                return View(project);
+                //return View(project);
+                return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Edit", project) });
             }
 
             await _service.UpdateAsync(id, project);
             //notification
             TempData["success"] = "Project updated successfully";
-            return RedirectToAction(nameof(Index));
+            // return RedirectToAction(nameof(Index));
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
         }
 
         //Get: Pojects/Delete/1
@@ -88,6 +95,7 @@ namespace BugTrackerApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComfirmed(int id)
         {
             var projectDetails = await _service.GetByIdAsync(id);
@@ -96,7 +104,8 @@ namespace BugTrackerApp.Controllers
             await _service.DeleteAsync(id);
             //notification
             TempData["success"] = "Project deleted successfully";
-            return RedirectToAction(nameof(Index));
+            //return RedirectToAction(nameof(Index));
+            return Json(new { html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
         }
 
         //update project status with values from Project index view scripts
@@ -107,6 +116,8 @@ namespace BugTrackerApp.Controllers
             TempData["success"] = "Project status updated successfully";
             return RedirectToAction(nameof(Index));
         }
+
+        //Add project users
 
         public async Task<IActionResult> AddProjectUsers(int id)
         {
@@ -129,14 +140,14 @@ namespace BugTrackerApp.Controllers
                     Role = await GetUserRoles(user)
                 };
 
-                //if (await _userManager.IsInRoleAsync(user, project.Name))
-                //{
-                //    projectUsersVM.Selected = true;
-                //}
-                //else
-                //{
-                //    projectUsersVM.Selected = false;
-                //}
+                if (await _userManager.IsInRoleAsync(user, project.Name))
+                {
+                    projectUsersVM.Selected = true;
+                }
+                else
+                {
+                    projectUsersVM.Selected = false;
+                }
                 model.Add(projectUsersVM);
             }
             return View(model);
@@ -153,24 +164,42 @@ namespace BugTrackerApp.Controllers
             var project = await _service.GetByIdAsync(id);
             if (project == null)
             {
+                ViewBag.ErrorMessage = $"Project with Id = {id} cannot be found";
                 return View("NotFound");
             }
+            else
+            {
+                for (int i = 0; i < model.Count; i++)
+                {
+                    var user = await _userManager.FindByIdAsync(model[i].UserId);
 
-            //var users = await _userManager.GetUsersAsync(project);
-            //var result = await _userManager.RemoveFromUsersAsync(project, users);
-            //if (!result.Succeeded)
-            //{
-            //    ModelState.AddModelError("", "Cannot remove project existing users");
-            //    return View(model);
-            //}
-            //result = await _userManager.AddToUsersAsync(project, model.Where(x => x.Selected).Select(y => y.UserName));
-            //if (!result.Succeeded)
-            //{
-            //    ModelState.AddModelError("", "Cannot add selected users to project");
-            //    return View(model);
-            //}
+                    IdentityResult result;
+                    if (model[i].Selected && !await _userManager.IsInRoleAsync(user, project.Name))
+                    {
+                       // result = await _userManager.AddToRoleAsync(user, project.Name);
+                        result = await _userManager.AddToRoleAsync(user, project.Name);
+                    }
+                    else if (!model[i].Selected && (await _userManager.IsInRoleAsync(user, project.Name)))
+                    {
+                        result = await _userManager.RemoveFromRoleAsync(user, project.Name);
+                    }
+                    else
+                    {
+                        continue;
+                    }
+
+                    if (result.Succeeded)
+                    {
+                        if (i < (model.Count - 1))
+                            continue;
+                        else
+                            return RedirectToAction("Details", new { Id = id });
+                    }
+                }
+            }
             return RedirectToAction("Index");
         }
     }
 }
+
 

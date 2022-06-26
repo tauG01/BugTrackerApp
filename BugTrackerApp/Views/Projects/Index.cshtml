@@ -3,7 +3,7 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="row">
+<div class="row" id="view-all">
     <div class="col-md-12">
 
         <h3 class="card-title text-primary">Projects</h3>
@@ -11,7 +11,7 @@
         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
         {
             <p class="card-description">
-                <a asp-action="Create">Add New Project</a>
+                <a onclick="showInPopup('@Url.Action("Create","Projects",null,Context.Request.Scheme)', 'New Project')" class="btn btn-primary text-white">Add New Project</a>
             </p>
         }
 
@@ -91,8 +91,13 @@
                         @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                         {
                             <td class="align-middle">
-                                <a class="btn btn-outline-primary" asp-action="Edit" asp-route-id="@item.Id"> Edit </a> |
-                                <a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>
+                                <a class="btn btn-outline-primary" onclick="showInPopup('@Url.Action("Edit","Projects",new { id = item.Id },Context.Request.Scheme)', 'Update Project')"> Edit </a> |
+                                @*@<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>*@
+
+                                <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                    <input type="hidden" asp-for="@item.Id" />
+                                    <input type="submit" value="Delete" class="btn btn-outline-danger" />
+                                </form>
                             </td>
                         }
                     </tr>

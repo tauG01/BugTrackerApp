@@ -2,14 +2,15 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
 
 
 <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-10 offset-1">
         <h3>New Bug</h3>
         <hr />
-        <form asp-action="Create">
+        <form asp-action="Create" onsubmit="return jQueryAjaxPost(this);" autocomplete="off">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
                 <label asp-for="ProjectId" class="control-label"></label>
@@ -31,7 +32,7 @@
            
             <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" />
-                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                <a class="btn btn-outline-secondary" data-dismiss="modal" aria-label="Close">Cancel</a>
             </div>
         </form>
     </div>
