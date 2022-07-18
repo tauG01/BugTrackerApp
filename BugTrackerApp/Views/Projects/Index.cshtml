@@ -3,71 +3,70 @@
     ViewData["Title"] = "Index";
 }
 
-<div class="row" id="view-all">
-    <div class="col-md-12">
+<div class="table-responsive" id="view-all">
 
-        <h3 class="card-title text-primary">Projects</h3>
+    <h3 class="card-title text-primary">Projects</h3>
 
-        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
-        {
-            <p class="card-description">
-                <a onclick="showInPopup('@Url.Action("Create","Projects",null,Context.Request.Scheme)', 'New Project')" class="btn btn-primary text-white">Add New Project</a>
-            </p>
-        }
+    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+    {
+        <p class="card-description">
+            <a onclick="showInPopup('@Url.Action("Create","Projects",null,Context.Request.Scheme)', 'New Project')" class="btn btn-primary text-white">Add New Project</a>
+        </p>
+    }
 
-        <table class="table" id="userTable">
-            <thead>
-                <tr class="text-left">
-                    <th>@Html.DisplayNameFor(model => model.Name)</th>
-                    <th>@Html.DisplayNameFor(model => model.Owner)</th>
-                    <th>Status</th>
+    <table class="table" id="userTable">
+        <thead>
+            <tr class="text-left">
+                <th>@Html.DisplayNameFor(model => model.Name)</th>
+                <th>@Html.DisplayNameFor(model => model.Owner)</th>
+                <th>Status</th>
 
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                     {
                         <th>@Html.DisplayNameFor(model => model.ProjectStatus)</th>
-                    }
-                    <th> Bug Count </th>
+                    }*@
+                <th> Bug Count </th>
 
-                    <th> Details </th>
+                <th> Details </th>
 
-                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
-                    {
-                        <th>Actions</th>
-                    }
-
-                </tr>
-            </thead>
-            <tbody>
-                @foreach (var item in Model)
+                @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                 {
-                    <tr>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Name)
-                        </td>
-                        <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Owner)
-                        </td>
+                    <th>Actions</th>
+                }
 
-                        <td class="align-middle">
-                            @if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.New)
-                            {
-                                <label class="badge badge-danger">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
-                            }
-                            else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.Active)
-                            {
-                                <label class="badge badge-info">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
-                            }
-                            else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.InProgress)
-                            {
-                                <label class="badge badge-warning">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
-                            }
-                            else
-                            {
-                                <label class="badge badge-success">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
-                            }
-                        </td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Owner)
+                    </td>
 
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    <td class="align-middle">
+                        @if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.New)
+                        {
+                            <label class="badge badge-danger">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                        }
+                        else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.Active)
+                        {
+                            <label class="badge badge-info">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                        }
+                        else if (item.ProjectStatus == BugTrackerApp.Data.Enums.ProjectStatus.InProgress)
+                        {
+                            <label class="badge badge-warning">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                        }
+                        else
+                        {
+                            <label class="badge badge-success">@Html.DisplayFor(modelItem => item.ProjectStatus)</label>
+                        }
+                    </td>
+
+                    @*@if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
                         {
                             <td class="align-middle">
                                 <form method="post" asp-action="UpdateStatus">
@@ -78,33 +77,33 @@
                                     </select>
                                 </form>
                             </td>
-                        }
+                        }*@
 
+                    <td class="align-middle">
+                        @Html.DisplayFor(modelItem => item.Tickets.Count)
+                    </td>
+
+                    <td class="align-middle">
+                        <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"> Details </a>
+                    </td>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
                         <td class="align-middle">
-                            @Html.DisplayFor(modelItem => item.Tickets.Count)
+                            <a class="btn btn-outline-primary" onclick="showInPopup('@Url.Action("Edit","Projects",new { id = item.Id },Context.Request.Scheme)', 'Update Project')"> Edit </a> |
+                            @*@<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>*@
+
+                            <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
+                                <input type="hidden" asp-for="@item.Id" />
+                                <input type="submit" value="Delete" class="btn btn-outline-danger" />
+                            </form>
                         </td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 
-                        <td class="align-middle">
-                            <a class="btn btn-outline-info" asp-action="Details" asp-route-id="@item.Id"> Details </a>
-                        </td>
-
-                        @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
-                        {
-                            <td class="align-middle">
-                                <a class="btn btn-outline-primary" onclick="showInPopup('@Url.Action("Edit","Projects",new { id = item.Id },Context.Request.Scheme)', 'Update Project')"> Edit </a> |
-                                @*@<a class="btn btn-outline-danger" asp-action="Delete" asp-route-id="@item.Id"> Delete </a>*@
-
-                                <form asp-action="Delete" asp-route-id="@item.Id" onsubmit="return jQueryAjaxDelete(this)" class="d-inline">
-                                    <input type="hidden" asp-for="@item.Id" />
-                                    <input type="submit" value="Delete" class="btn btn-outline-danger" />
-                                </form>
-                            </td>
-                        }
-                    </tr>
-                }
-            </tbody>
-        </table>
-    </div>
 </div>
 
 @section scripts{

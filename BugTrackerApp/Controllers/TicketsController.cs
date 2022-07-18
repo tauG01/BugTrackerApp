@@ -50,13 +50,15 @@ namespace BugTrackerApp.Controllers
                 //return View(Ticket);
                 return Json(new { isValid = false, html = Helper.RenderRazorViewToString(this, "Create", Ticket) });
             }
-            Ticket.Created = DateTime.Now;
-            Ticket.Modified = DateTime.Now;
-            await _service.AddNewTicketAsync(Ticket);
-            //notification
-            TempData["success"] = "Bug created successfully";
+            else
+            {
+                Ticket.Created = DateTime.Now;
+                Ticket.Modified = DateTime.Now;
+                await _service.AddNewTicketAsync(Ticket);
+            }
+            var data = await _service.GetNewTicketDropdownsValues();
             //return RedirectToAction(nameof(Index));
-            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", data) });
         }
 
         //Get: Events/Edit/1
@@ -93,8 +95,7 @@ namespace BugTrackerApp.Controllers
             }
             Ticket.Modified = DateTime.Now;
             await _service.UpdateTicketAsync(Ticket);
-            //notification
-            TempData["success"] = "Bug updated successfully";
+           
             // return RedirectToAction(nameof(Index));
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
         }
@@ -108,14 +109,13 @@ namespace BugTrackerApp.Controllers
         }
 
         [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteComfirmed(int id)
         {
             var ticketDetails = await _service.GetByIdAsync(id);
             if (ticketDetails == null) return View("NotFound");
 
             await _service.DeleteAsync(id);
-            //notification
-            TempData["success"] = "Bug deleted successfully";
             //return RedirectToAction(nameof(Index));
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetNewTicketDropdownsValues()) });
         }
@@ -124,8 +124,6 @@ namespace BugTrackerApp.Controllers
         public async Task<IActionResult> UpdateStatus(int TicketId, int TicketStatus)
         {
             await _service.UpdateAsync(TicketId, TicketStatus);
-            //notification
-            TempData["success"] = "Bug status updated successfully";
             return RedirectToAction(nameof(Index));
         }
     }

@@ -5,9 +5,6 @@
 //datatables
 $(document).ready(function () {
     $('#userTable').DataTable({
-        "fnDrawCallback": function (oSettings) {
-            
-        },
         "scrollY": "450px",
         "scrollCollapse": true,
         "paging": true,
@@ -44,8 +41,24 @@ jQueryAjaxPost = form => {
                     $('#form-modal .modal-body').html('');
                     $('#form-modal .modal-title').html('');
                     $('#form-modal').modal('hide');
-                   // window.location.assign(res.html);
-                    //window.location.href = res.html
+
+                    //reinitialise the datatable
+                    if ($.fn.DataTable.isDataTable("#userTable")) {
+                        $('#userTable').DataTable().clear().destroy();
+                    }
+
+                    $("#userTable").dataTable({
+                        "scrollY": "450px",
+                        "scrollCollapse": true,
+                        "paging": true,
+                        "pageLength": 5,
+                        "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    });
+
+                    toastr.options = {
+                        "positionClass": "toast-top-center"
+                    }
+                    toastr.success("Successfully added");
                 }
                 else
                     $('#form-modal .modal-body').html(res.html);
@@ -72,7 +85,18 @@ jQueryAjaxDelete = form => {
                 processData: false,
                 success: function (res) {
                     $('#view-all').html(res.html);
-                    //window.location.assign(res.html);
+                    //reinitialise the datatables
+                    if ($.fn.DataTable.isDataTable("#userTable")) {
+                        $('#userTable').DataTable().clear().destroy();
+                    }
+                    $("#userTable").dataTable({
+                        "scrollY": "450px",
+                        "scrollCollapse": true,
+                        "paging": true,
+                        "pageLength": 5,
+                        "lengthMenu": [[5, 10, 20, -1], [5, 10, 20, 'Todos']]
+                    });
+                    toastr.success("Successfully deleted");
                 },
                 error: function (err) {
                     console.log(err)

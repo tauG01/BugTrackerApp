@@ -2,10 +2,11 @@
 
 @{
     ViewData["Title"] = "Create";
+    Layout = null;
 }
 
 <div class="row">
-    <div class="col-md-6 offset-3">
+    <div class="col-md-10 offset-1">
         <h3>Add New Role</h3>
         <hr />
         <form asp-action="Create">
@@ -18,7 +19,8 @@
 
             <div class="form-group">
                 <input type="submit" value="Add" class="btn btn-primary" />
-                <a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>
+                @*<a class="btn btn-outline-secondary" asp-action="Index">Cancel</a>*@
+                <a class="btn btn-outline-secondary" data-dismiss="modal" aria-label="Close">Cancel</a>
             </div>
         </form>
     </div>

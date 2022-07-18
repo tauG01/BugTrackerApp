@@ -46,11 +46,10 @@ namespace BugTrackerApp.Controllers
             else
             {
                 await _service.AddAsync(project);
-                //notification
-                TempData["success"] = "Project created successfully";
             }
+            var data = await _service.GetAllAsync(n => n.Tickets);
             // return RedirectToAction(nameof(Index));
-            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
+            return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", data) });
 
         }
 
@@ -80,8 +79,6 @@ namespace BugTrackerApp.Controllers
             }
 
             await _service.UpdateAsync(id, project);
-            //notification
-            TempData["success"] = "Project updated successfully";
             // return RedirectToAction(nameof(Index));
             return Json(new { isValid = true, html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
         }
@@ -102,8 +99,6 @@ namespace BugTrackerApp.Controllers
             if (projectDetails == null) return View("NotFound");
 
             await _service.DeleteAsync(id);
-            //notification
-            TempData["success"] = "Project deleted successfully";
             //return RedirectToAction(nameof(Index));
             return Json(new { html = Helper.RenderRazorViewToString(this, "Index", await _service.GetAllAsync(n => n.Tickets)) });
         }
@@ -112,8 +107,6 @@ namespace BugTrackerApp.Controllers
         public async Task<IActionResult> UpdateStatus(int ProjectId, int ProjectStatus)
         {
             await _service.UpdateAsync(ProjectId, ProjectStatus);
-            //notification
-            TempData["success"] = "Project status updated successfully";
             return RedirectToAction(nameof(Index));
         }
 

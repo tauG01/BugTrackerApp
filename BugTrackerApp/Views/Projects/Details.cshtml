@@ -5,7 +5,7 @@
 }
 
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <div class="card mb-12">
             <div class="row g-0">
                 <div class="col-md-12">
@@ -31,6 +31,9 @@
                         <p class="card-text">
                             <b>Bugs: </b> @Model.Tickets.Count
                         </p>
+                        <p class="card-text">
+                            <b>Project Status: </b> @Model.ProjectStatus
+                        </p>
                     </div>
                 </div>
             </div>
@@ -42,10 +45,94 @@
             </div>*@
     </div>
 
-    @*Tickets for this project*@
-    <div class="col-md-8">
 
-        <h3 class="card-title text-primary">Bugs for this project (@Model.Name)</h3>
+
+    @*Users for this project*@
+    <div class="col-md-6">
+
+        <h3 class="card-title text-primary">Project Users</h3>
+
+        <p class="card-description">
+            <a asp-action="AddProjectUsers" asp-route-id="@Model.Id">Add User</a>
+        </p>
+
+        <table class="table" id="userTable">
+            <thead>
+                <tr class="text-left">
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Role</th>
+
+                    @*<th>Actions</th>*@
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.ApplicationUsers)
+                {
+                    <tr>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.UserName)
+                        </td>
+                        <td class="align-middle">
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+
+        <table class="table" id="userTable">
+            <thead>
+                <tr class="text-left">
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
+                        <th>@Html.DisplayNameFor(model => model.ProjectStatus)</th>
+                    }
+
+                </tr>
+            </thead>
+            <tbody>
+
+
+                <tr>
+
+                    @if (User.Identity.IsAuthenticated && User.IsInRole("Admin") || User.Identity.IsAuthenticated && User.IsInRole("ProjectManager"))
+                    {
+                        <td class="align-middle">
+                            <form method="post" asp-action="UpdateStatus">
+                                <input type="hidden" name="ProjectId" value="@Model.Id" />
+                                <select class="StatusSelect" asp-for="@Model.ProjectStatus)"
+                                        asp-items="Html.GetEnumSelectList(typeof(BugTrackerApp.Data.Enums.ProjectStatus))"
+                                        name="ProjectStatus">
+                                </select>
+                            </form>
+                        </td>
+                    }
+
+                </tr>
+            </tbody>
+        </table>
+
+
+        @section scripts{
+            <script>
+                $(function () {
+                    $(".StatusSelect").change(function () {
+                        $(this).closest('form').submit();
+                    })
+                })
+            </script>
+        }
+    </div>
+
+    @*Tickets for this project*@
+    <div class="col-md-6">
+
+        <h3 class="card-title text-primary">All bugs in @Model.Name</h3>
 
         <table class="table" id="userTable">
             <thead>
@@ -82,41 +169,4 @@
             </tbody>
         </table>
     </div>
-
-    @*Users for this project*@
-<div class="col-md-8">
-
-    <h3 class="card-title text-primary">Project Users</h3>
-
-    <p class="card-description">
-        <a asp-action="AddProjectUsers" asp-route-id="@Model.Id">Add User</a>
-    </p>
-
-    <table class="table" id="userTable">
-        <thead>
-            <tr class="text-left">
-                <th>Name</th>
-                <th>Email</th>
-                <th>Role</th>
-
-                @*<th>Actions</th>*@
-
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model.ApplicationUsers)
-            {
-                <tr>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.UserName)
-                    </td>
-                    <td class="align-middle">
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    
-                </tr>
-            }
-        </tbody>
-    </table>
-</div>
 </div>
